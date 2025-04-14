@@ -1,9 +1,24 @@
 import { prisma } from './prisma.js';
+import { getPaginationParams } from '../base/utils.js'
 
 export const dbResolvers = {
     Query: {
-        usersDb: () => prisma.user.findMany(),
-        todosDb: () => prisma.todo.findMany(),
+        usersDb: (parent, args) => {
+            const { skip, take } = getPaginationParams(args);
+            return prisma.user.findMany({
+                skip: skip,
+                take: take,
+                orderBy: { id: 'asc' }
+            });
+        },
+        todosDb: (parent, args) => {
+            const { skip, take } = getPaginationParams(args);
+            return prisma.todo.findMany({
+                skip: skip,
+                take: take,
+                orderBy: { id: 'asc' }
+            });
+        },
         userDb: (parent, args) =>
             prisma.user.findUnique({
                 where: {
@@ -18,10 +33,27 @@ export const dbResolvers = {
             }),
     },
     User: {
-        todosDb: (parent) => prisma.todo.findMany({ where: { userId: parent.id } }),
+        todosDb: (parent, args) => {
+            const { skip, take } = getPaginationParams(args);
+            const userIdInt = parseInt(parent.id, 10);
+            if (isNaN(userIdInt)) {
+                return [];
+            }
+            return prisma.todo.findMany({
+                where: { userId: userIdInt },
+                skip: skip,
+                take: take,
+                orderBy: { id: 'asc' }
+            });
+        }
     },
     Todo: {
-        userDb: (parent) => prisma.user.findUnique({ where: { id: parent.userId } }),
+        userDb: (parent) =>
+            prisma.user.findUnique({
+                where: {
+                    id: parent.userId
+                }
+            }),
     },
 
 

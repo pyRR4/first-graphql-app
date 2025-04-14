@@ -16,25 +16,25 @@ type User{
     login: String!
 
     # nieladnie, ale w celach naukowych tylko
-    todosBase: [Todo!]!
-    todosUrl: [Todo!]!
-    todosDb: [Todo!]!
+    todosBase(page: Int, size: Int): [Todo!]!
+    todosUrl(page: Int, size: Int): [Todo!]!
+    todosDb(page: Int, size: Int): [Todo!]!
 }
 
 type Query {
     # nieladnie, ale w celach naukowych tylko
-    todosUrl: [Todo!]!
-    usersUrl: [User!]!
+    todosUrl(page: Int, size: Int): [Todo!]!
+    usersUrl(page: Int, size: Int): [User!]!
     todoUrl(id: ID!): [Todo!]
     userUrl(id: ID!): [User!]
 
-    usersDb: [User!]!
-    todosDb: [Todo!]!
+    usersDb(page: Int, size: Int): [User!]!
+    todosDb(page: Int, size: Int): [Todo!]!
     userDb(id: ID!): User
     todoDb(id: ID!): Todo
 
-    todosBase: [Todo!]
-    usersBase: [User!]
+    todosBase(page: Int, size: Int): [Todo!]
+    usersBase(page: Int, size: Int): [User!]
     todoBase(id: ID!): [Todo!]
     userBase(id: ID!): [User!]
 }
