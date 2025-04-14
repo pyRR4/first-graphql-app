@@ -1,8 +1,12 @@
-type ToDoItem{
+type Todo{
     id: ID!
     title: String!
     completed: Boolean!
-    user: User!
+
+    # nieladnie, ale w celach naukowych tylko
+    userBase: User!
+    userUrl: User!
+    userDb: User!
 }
 
 type User{
@@ -10,12 +14,37 @@ type User{
     name: String!
     email: String!
     login: String!
-    todos: [ToDoItem!]!
+
+    # nieladnie, ale w celach naukowych tylko
+    todosBase: [Todo!]!
+    todosUrl: [Todo!]!
+    todosDb: [Todo!]!
 }
 
 type Query {
-    todos: [ToDoItem!]
-    todo(id: ID!): ToDoItem
-    users: [User!]
-    user(id: ID!): User
+    # nieladnie, ale w celach naukowych tylko
+    todosUrl: [Todo!]!
+    usersUrl: [User!]!
+    todoUrl(id: ID!): [Todo!]
+    userUrl(id: ID!): [User!]
+
+    usersDb: [User!]!
+    todosDb: [Todo!]!
+    userDb(id: ID!): User
+    todoDb(id: ID!): Todo
+
+    todosBase: [Todo!]
+    usersBase: [User!]
+    todoBase(id: ID!): [Todo!]
+    userBase(id: ID!): [User!]
+}
+
+type Mutation {
+    addUser(email: String!, login: String!, name: String!): User!
+    updateUser(id: ID!, email: String, login: String, name: String): User
+    deleteUser(id: ID!): Boolean
+
+    addTodo(title: String!, userId: ID!, completed: Boolean = false): Todo!
+    updateTodo(id: ID!, title: String, completed: Boolean): Todo
+    deleteTodo(id: ID!): Boolean
 }
